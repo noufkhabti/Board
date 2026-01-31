@@ -38,7 +38,7 @@
     }
 
     .wrap{
-      max-width:1200px;
+      max-width:1180px;
       margin:22px auto;
       padding:0 14px 26px;
     }
@@ -143,17 +143,18 @@
 
     .hint{ font-size:12px; color:var(--muted); font-weight:700; }
 
-    /* ===== Grid Responsive (✅ أصلحناها) ===== */
+    /* ===== Grid Responsive ===== */
     .grid{
       display:grid;
-      grid-template-columns:repeat(2, minmax(0,1fr)); /* كمبيوتر: عمودين أفضل */
+      grid-template-columns:repeat(2, 1fr); /* كمبيوتر */
       gap:12px;
     }
 
     /* آيباد */
     @media (max-width: 1024px){
-      .grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+      .grid{ grid-template-columns:repeat(2,1fr); }
       .wrap{ max-width: 980px; }
+      .titleRow{ white-space:normal; }
     }
 
     /* جوال */
@@ -170,11 +171,10 @@
       padding:14px;
       position:relative;
       display:flex;
-      align-items:flex-start;
+      align-items:center;
       gap:14px;
       overflow:hidden;
-      flex-wrap:wrap;              /* ✅ مهم: يسمح لها تتوزع إذا ضاقت */
-      min-height:auto;             /* ✅ أزلنا التثبيت */
+      min-height:140px;
     }
 
     /* رقم الترتيب يمين أعلى */
@@ -197,17 +197,14 @@
       display:flex;
       align-items:center;
       gap:12px;
-      margin-left:auto;
-      padding-right:34px; /* مساحة للـ # */
       flex:0 0 auto;
-      min-width:260px;    /* ✅ يمنع انضغاط الاسم */
+      margin-left:auto;
+      padding-right:34px;
+      position:relative;
+      min-width:0;
     }
 
-    .info{
-      text-align:right;
-      min-width:0;
-      max-width:360px;
-    }
+    .info{ text-align:right; min-width:180px; max-width:420px; }
 
     .nameRow{
       display:flex;
@@ -250,19 +247,19 @@
       color:#7c2d12;
     }
 
-    /* ✅ التقييمات تأخذ باقي المساحة */
+    /* يسار: التقييمات */
     .leftRates{
       display:flex;
       flex-direction:column;
       gap:10px;
-      flex:1 1 260px; /* ✅ تتمدد وتلتف */
-      min-width:260px;
+      flex:1 1 auto;
+      min-width:0;
     }
 
-    .row{ display:flex; align-items:center; gap:10px; }
+    .row{ display:flex; align-items:center; gap:10px; min-width:0; }
     .emoji{ width:28px; text-align:center; font-size:20px; line-height:1; }
 
-    .stars{ display:flex; gap:6px; direction:ltr; flex-wrap:wrap; }
+    .stars{ display:flex; gap:6px; direction:ltr; flex-wrap:nowrap; }
     .star{
       font-size:22px;
       color:var(--star-off);
@@ -283,6 +280,7 @@
       overflow:hidden;
       user-select:none;
       flex:0 0 auto;
+      position:relative;
     }
 
     .avatarWrap img{
@@ -323,7 +321,7 @@
     .footer{
       margin-top:18px;
       text-align:center;
-      font-size:13px;
+      font-size:12px;
       font-weight:900;
       color:#6b7280;
       padding:12px 10px;
@@ -333,14 +331,7 @@
       box-shadow:0 6px 14px rgba(0,0,0,.05);
     }
 
-    /* ✅ آيباد: نخلي البطاقة عمودية أيضًا (عشان ما تتزاحم) */
-    @media (max-width: 900px){
-      .card{ flex-direction:column; }
-      .rightInfo{ padding-right:0; width:100%; justify-content:flex-end; }
-      .leftRates{ width:100%; min-width:0; }
-    }
-
-    /* ✅ جوال */
+    /* ===== جوال: نفس شكل الآيباد/الكمبيوتر + التقييمات عمودين ===== */
     @media (max-width: 640px){
       .header{ flex-direction:column; align-items:stretch; }
       .titleRow{ font-size:18px; white-space:normal; }
@@ -350,12 +341,49 @@
       .legend{ border-radius:16px; }
       .search{ min-width:unset; }
 
-      .rankBadge{ font-size:12px; padding:5px 9px; }
+      .card{
+        flex-direction:row; /* ✅ يظل أفقي */
+        align-items:center;
+        flex-wrap:wrap;
+        gap:10px;
+        padding:12px;
+        min-height:unset;
+      }
 
-      .avatarWrap{ width:64px; height:64px; }
-      .name{ font-size:18px; }
+      .rankBadge{
+        top:10px;
+        right:10px;
+        font-size:12px;
+        padding:5px 9px;
+      }
+
+      .rightInfo{
+        padding-right:34px;
+        flex:1 1 auto;
+        min-width:0;
+      }
+
+      .avatarWrap{ width:58px; height:58px; border-width:3px; }
+      .name{ font-size:17px; }
       .avg{ font-size:12px; }
-      .star{ font-size:20px; }
+
+      /* ✅ التقييمات عمودين */
+      .leftRates{
+        width:100%;
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px 12px;
+        margin-top:6px;
+      }
+
+      .row{
+        justify-content:flex-start;
+        gap:8px;
+      }
+
+      .emoji{ width:22px; font-size:18px; }
+      .stars{ gap:5px; }
+      .star{ font-size:18px; }
     }
   </style>
 </head>
@@ -396,7 +424,7 @@
   <div class="grid" id="grid"></div>
   <div class="debug" id="debug"></div>
 
-  <div class="footer">لأجمل الطالبات… صُمِّمت بحُب 🤍🌟</div>
+  <div class="footer">صُممت بحُب 🤍 — نوف خبتي</div>
 </div>
 
 <script>
@@ -542,7 +570,7 @@ function render(){
     const p = clamp(r.participation);
     const c = clamp(r.cooperation);
     const f = clamp(r.focus);
-    const b = clamp(r.behavior);
+    const b = clamp(r.behavior);   // عرض فقط
     const k = clamp(r.commitment);
 
     const avg = scoreRow(r).toFixed(1);
@@ -570,8 +598,8 @@ function render(){
           <div class="row"><div class="emoji">🤝</div>${stars(c)}</div>
           <div class="row"><div class="emoji">👩‍🎓</div>${stars(p)}</div>
           <div class="row"><div class="emoji">👀</div>${stars(f)}</div>
-          <div class="row"><div class="emoji">🧠</div>${stars(b)}</div>
           <div class="row"><div class="emoji">🎯</div>${stars(k)}</div>
+          <div class="row"><div class="emoji">🧠</div>${stars(b)}</div>
         </div>
       </div>
     `;
