@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>لوحة تحفيز فيزياء ٣-٢ للصف الثالث ثانوي شعبة ٢</title>
+
+  <style>
+    :root{
+      --bg1:#fff7fb;
+      --bg2:#f3fff7;
+      --text:#111827;
+      --muted:#6b7280;
+
+      --shadow:0 10px 25px rgba(0,0,0,.08);
+      --radius:18px;
+
+      --star-off:#e5e7eb;
+      --star-on:#fbbf24;
+
+      --ring:#8fe0a5;
+
+      --gold:#fbbf24;
+      --silver:#cbd5e1;
+      --bronze:#d6a25a;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, var(--bg2), transparent),
+        radial-gradient(1000px 600px at 90% 20%, var(--bg1), transparent),
+        #fff;
+      color:var(--text);
+    }
+
+    .wrap{
+      max-width:1200px;
+      margin:22px auto;
+      padding:0 14px 26px;
+    }
+
+    /* ===== Header ===== */
+    .header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      padding:14px 16px;
+      background:linear-gradient(135deg, rgba(34,197,94,.18), rgba(168,85,247,.14), rgba(249,115,22,.14));
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      gap:14px;
+    }
+
+    .titleBlock{ display:flex; flex-direction:column; gap:8px; min-width:0; flex:1 1 auto; }
+    .titleRow{
+      font-weight:1000;
+      font-size:22px;
+      line-height:1.25;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .metaRow{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .badge{
+      font-size:13px;
+      background:#fff;
+      padding:7px 12px;
+      border-radius:999px;
+      border:1px dashed #ccc;
+      white-space:nowrap;
+      color:#111;
+      font-weight:900;
+    }
+
+    .schoolBlock{
+      text-align:left;
+      direction:rtl;
+      min-width:220px;
+      background:rgba(255,255,255,.65);
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:14px;
+      padding:10px 12px;
+      box-shadow:0 6px 14px rgba(0,0,0,.06);
+      line-height:1.35;
+      flex:0 0 auto;
+    }
+    .schoolLine{
+      font-weight:1000;
+      font-size:13px;
+      color:#111827;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:flex-start;
+      white-space:nowrap;
+    }
+    .schoolIcon{ font-size:16px; }
+
+    /* ===== Toolbar ===== */
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin:12px 0 10px;
+      align-items:center;
+    }
+
+    .search{
+      flex:1 1 320px;
+      background:#fff;
+      border-radius:999px;
+      padding:10px 12px;
+      box-shadow:0 6px 14px rgba(0,0,0,.06);
+      border:1px solid #ddd;
+      min-width:240px;
+    }
+    .search input{
+      width:100%;
+      border:0;
+      outline:0;
+      font-size:14px;
+    }
+
+    .legend{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      font-size:12px;
+      font-weight:900;
+      color:#374151;
+      background:rgba(255,255,255,.65);
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:999px;
+      padding:8px 12px;
+      box-shadow:0 6px 14px rgba(0,0,0,.05);
+    }
+    .legend .item{ display:flex; align-items:center; gap:6px; white-space:nowrap; }
+
+    .hint{ font-size:12px; color:var(--muted); font-weight:700; }
+
+    /* ===== Grid Responsive (✅ أصلحناها) ===== */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr)); /* كمبيوتر: عمودين أفضل */
+      gap:12px;
+    }
+
+    /* آيباد */
+    @media (max-width: 1024px){
+      .grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+      .wrap{ max-width: 980px; }
+    }
+
+    /* جوال */
+    @media (max-width: 640px){
+      .grid{ grid-template-columns:1fr; }
+      .wrap{ padding:0 10px 22px; margin:14px auto; }
+    }
+
+    /* ===== Card ===== */
+    .card{
+      background:#fff;
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:14px;
+      position:relative;
+      display:flex;
+      align-items:flex-start;
+      gap:14px;
+      overflow:hidden;
+      flex-wrap:wrap;              /* ✅ مهم: يسمح لها تتوزع إذا ضاقت */
+      min-height:auto;             /* ✅ أزلنا التثبيت */
+    }
+
+    /* رقم الترتيب يمين أعلى */
+    .rankBadge{
+      position:absolute;
+      top:10px;
+      right:10px;
+      background:#fff;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:13px;
+      font-weight:1000;
+      box-shadow:0 6px 14px rgba(0,0,0,.10);
+      border:1px solid rgba(0,0,0,.06);
+      z-index:3;
+    }
+
+    /* يمين: الصورة ثم الاسم */
+    .rightInfo{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-left:auto;
+      padding-right:34px; /* مساحة للـ # */
+      flex:0 0 auto;
+      min-width:260px;    /* ✅ يمنع انضغاط الاسم */
+    }
+
+    .info{
+      text-align:right;
+      min-width:0;
+      max-width:360px;
+    }
+
+    .nameRow{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      justify-content:flex-end;
+      min-width:0;
+    }
+
+    .crown{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      box-shadow:0 6px 14px rgba(0,0,0,.08);
+      font-size:16px;
+      flex:0 0 auto;
+      border:1px solid rgba(0,0,0,.08);
+    }
+    .crown.gold{ background:rgba(251,191,36,.22); border-color:rgba(245,158,11,.40); }
+    .crown.silver{ background:rgba(203,213,225,.35); border-color:rgba(148,163,184,.45); }
+    .crown.bronze{ background:rgba(214,162,90,.22); border-color:rgba(183,121,31,.40); }
+
+    .name{
+      font-weight:1000;
+      font-size:20px;
+      line-height:1.2;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      min-width:0;
+    }
+
+    .avg{
+      margin-top:6px;
+      font-size:13px;
+      font-weight:900;
+      color:#7c2d12;
+    }
+
+    /* ✅ التقييمات تأخذ باقي المساحة */
+    .leftRates{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      flex:1 1 260px; /* ✅ تتمدد وتلتف */
+      min-width:260px;
+    }
+
+    .row{ display:flex; align-items:center; gap:10px; }
+    .emoji{ width:28px; text-align:center; font-size:20px; line-height:1; }
+
+    .stars{ display:flex; gap:6px; direction:ltr; flex-wrap:wrap; }
+    .star{
+      font-size:22px;
+      color:var(--star-off);
+      filter: drop-shadow(0 1px 0 rgba(0,0,0,.04));
+      user-select:none;
+    }
+    .star.filled{ color:var(--star-on); }
+
+    .avatarWrap{
+      width:74px;
+      height:74px;
+      border-radius:50%;
+      border:4px solid var(--ring);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(135deg, rgba(34,197,94,.12), rgba(168,85,247,.10), rgba(249,115,22,.10));
+      overflow:hidden;
+      user-select:none;
+      flex:0 0 auto;
+    }
+
+    .avatarWrap img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:50% 30%;
+      transform:scale(1.12);
+      border-radius:50%;
+      display:block;
+      pointer-events:none;
+    }
+
+    .letter{ font-size:28px; font-weight:1000; color:#111; }
+
+    /* أول 3 */
+    .top1 .avatarWrap{ border-color: var(--gold); box-shadow:0 0 0 3px rgba(251,191,36,.22), 0 10px 20px rgba(0,0,0,.10); }
+    .top2 .avatarWrap{ border-color: var(--silver); box-shadow:0 0 0 3px rgba(203,213,225,.22), 0 10px 20px rgba(0,0,0,.10); }
+    .top3 .avatarWrap{ border-color: var(--bronze); box-shadow:0 0 0 3px rgba(214,162,90,.18), 0 10px 20px rgba(0,0,0,.10); }
+
+    .top1 .name{ background:linear-gradient(90deg, rgba(251,191,36,.33), rgba(255,255,255,0)); padding:4px 10px; border-radius:12px; }
+    .top2 .name{ background:linear-gradient(90deg, rgba(203,213,225,.45), rgba(255,255,255,0)); padding:4px 10px; border-radius:12px; }
+    .top3 .name{ background:linear-gradient(90deg, rgba(214,162,90,.28), rgba(255,255,255,0)); padding:4px 10px; border-radius:12px; }
+
+    .debug{
+      margin-top:10px;
+      background:#fff;
+      border:1px solid #eee;
+      border-radius:14px;
+      padding:10px 12px;
+      font-size:12px;
+      color:#7c2d12;
+      font-weight:800;
+      display:none;
+    }
+    .debug.show{ display:block; }
+
+    .footer{
+      margin-top:18px;
+      text-align:center;
+      font-size:13px;
+      font-weight:900;
+      color:#6b7280;
+      padding:12px 10px;
+      background:rgba(255,255,255,.65);
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:14px;
+      box-shadow:0 6px 14px rgba(0,0,0,.05);
+    }
+
+    /* ✅ آيباد: نخلي البطاقة عمودية أيضًا (عشان ما تتزاحم) */
+    @media (max-width: 900px){
+      .card{ flex-direction:column; }
+      .rightInfo{ padding-right:0; width:100%; justify-content:flex-end; }
+      .leftRates{ width:100%; min-width:0; }
+    }
+
+    /* ✅ جوال */
+    @media (max-width: 640px){
+      .header{ flex-direction:column; align-items:stretch; }
+      .titleRow{ font-size:18px; white-space:normal; }
+      .schoolBlock{ min-width:unset; text-align:right; }
+
+      .toolbar{ gap:8px; }
+      .legend{ border-radius:16px; }
+      .search{ min-width:unset; }
+
+      .rankBadge{ font-size:12px; padding:5px 9px; }
+
+      .avatarWrap{ width:64px; height:64px; }
+      .name{ font-size:18px; }
+      .avg{ font-size:12px; }
+      .star{ font-size:20px; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="titleBlock">
+      <div class="titleRow">🌟 لوحة تحفيز فيزياء ٣-٢ للصف الثالث ثانوي شعبة ٢</div>
+      <div class="metaRow">
+        <div class="badge" id="count">جاري التحميل…</div>
+      </div>
+    </div>
+
+    <div class="schoolBlock">
+      <div class="schoolLine"><span class="schoolIcon">🏫</span>الثانوية الأولى في بيشة</div>
+      <div class="schoolLine"><span class="schoolIcon">👩‍🏫</span>معلمة المادة/ نوف خبتي</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search">
+      🔎 <input id="search" placeholder="ابحثي باسم الطالبة">
+    </div>
+
+    <div class="legend" aria-label="تعريف الرموز">
+      <div class="item">🤝 <span>التعاون</span></div>
+      <div class="item">👩‍🎓 <span>المشاركة</span></div>
+      <div class="item">👀 <span>التركيز</span></div>
+      <div class="item">🧠 <span>السلوك</span></div>
+      <div class="item">🎯 <span>الالتزام</span></div>
+    </div>
+
+    <div class="hint">⭐ المعدل = (المشاركة + التعاون + التركيز + الالتزام) ÷ 4</div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="debug" id="debug"></div>
+
+  <div class="footer">لأجمل الطالبات… صُمِّمت بحُب 🤍🌟</div>
+</div>
+
+<script>
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSOzNBxayAq8XiJpmr8H-eX1tmzU4EJFJAgTuxG-nSuJz7V46dGRPYjjfoL00P7nPVnin-tVIp7otDR/pub?output=csv";
+
+const grid  = document.getElementById("grid");
+const count = document.getElementById("count");
+const search = document.getElementById("search");
+const debug = document.getElementById("debug");
+
+let rows = [];
+
+function clamp(n){
+  const x = Number(n);
+  if (Number.isNaN(x)) return 0;
+  return Math.max(0, Math.min(5, x));
+}
+
+function stars(v){
+  v = clamp(v);
+  let h = '<div class="stars">';
+  for(let i=1;i<=5;i++){
+    h += `<span class="star ${i<=v?'filled':''}">★</span>`;
+  }
+  return h + '</div>';
+}
+
+function firstLetter(name){
+  const t = (name || "").trim();
+  if (!t) return "؟";
+  return t.replace(/["']/g,"").trim().charAt(0) || "؟";
+}
+
+function normalizePhoto(photo){
+  let src = (photo || "").trim();
+  if(!src) return "";
+
+  const idMatch = src.match(/id=([-\w]{25,})/);
+  if (idMatch && idMatch[1]) return `https://lh3.googleusercontent.com/d/${idMatch[1]}`;
+
+  if (src.includes("drive.google.com/file/d/")) {
+    const m = src.match(/\/d\/([-\w]{25,})/);
+    if (m && m[1]) return `https://lh3.googleusercontent.com/d/${m[1]}`;
+  }
+
+  if (/^[-\w]{25,}$/.test(src)) return `https://lh3.googleusercontent.com/d/${src}`;
+
+  return src;
+}
+
+function avatarHTML(name, photo){
+  const letter = firstLetter(name);
+  const src = normalizePhoto(photo);
+
+  if(!src){
+    return `<div class="avatarWrap"><div class="letter">${letter}</div></div>`;
+  }
+
+  const safeName = (name||"").replace(/"/g,'');
+  return `
+    <div class="avatarWrap" oncontextmenu="return false;" title="${safeName}">
+      <img src="${src}" alt="صورة ${safeName}"
+        onerror="this.parentElement.innerHTML='<div class=&quot;letter&quot;>${letter}</div>';">
+    </div>
+  `;
+}
+
+function parseCSV(text){
+  const out = [];
+  let row = [];
+  let cur = "";
+  let inQuotes = false;
+
+  for (let i=0; i<text.length; i++){
+    const c = text[i];
+    const next = text[i+1];
+
+    if (c === '"') {
+      if (inQuotes && next === '"') { cur += '"'; i++; }
+      else inQuotes = !inQuotes;
+      continue;
+    }
+
+    if (!inQuotes && (c === "," || c === "\t")) {
+      row.push(cur);
+      cur = "";
+      continue;
+    }
+
+    if (!inQuotes && (c === "\n" || c === "\r")) {
+      if (c === "\r" && next === "\n") i++;
+      row.push(cur);
+      out.push(row);
+      row = [];
+      cur = "";
+      continue;
+    }
+
+    cur += c;
+  }
+
+  if (cur.length || row.length){
+    row.push(cur);
+    out.push(row);
+  }
+
+  return out.filter(r => r.some(cell => (cell||"").trim() !== ""));
+}
+
+function toObjects(matrix){
+  const headers = (matrix[0] || []).map(h => (h||"").trim());
+  return matrix.slice(1).map(cells=>{
+    const obj = {};
+    headers.forEach((h,i)=> obj[h] = (cells[i] ?? "").trim());
+    return obj;
+  });
+}
+
+function scoreRow(r){
+  const p = clamp(r.participation);
+  const c = clamp(r.cooperation);
+  const f = clamp(r.focus);
+  const k = clamp(r.commitment);
+  return (p + c + f + k) / 4;
+}
+
+function crownHTML(i){
+  if (i === 0) return `<span class="crown gold" title="المركز الأول">👑</span>`;
+  if (i === 1) return `<span class="crown silver" title="المركز الثاني">👑</span>`;
+  if (i === 2) return `<span class="crown bronze" title="المركز الثالث">👑</span>`;
+  return "";
+}
+
+function render(){
+  const q = search.value.trim();
+  const view = rows
+    .filter(r => !q || (r.name||"").includes(q))
+    .sort((a,b) => scoreRow(b) - scoreRow(a));
+
+  count.textContent = `عدد الطالبات: ${view.length}`;
+
+  grid.innerHTML = view.map((r, i) => {
+    const p = clamp(r.participation);
+    const c = clamp(r.cooperation);
+    const f = clamp(r.focus);
+    const b = clamp(r.behavior);
+    const k = clamp(r.commitment);
+
+    const avg = scoreRow(r).toFixed(1);
+    const avgText = `${avg} / 5`;
+
+    const topClass = (i===0) ? "top1" : (i===1) ? "top2" : (i===2) ? "top3" : "";
+    const cleanName = (r.name||"طالبة").replace(/["']/g,"");
+
+    return `
+      <div class="card ${topClass}">
+        <div class="rankBadge">#${i+1}</div>
+
+        <div class="rightInfo">
+          ${avatarHTML(r.name, r.photo)}
+          <div class="info">
+            <div class="nameRow">
+              ${crownHTML(i)}
+              <div class="name">${cleanName}</div>
+            </div>
+            <div class="avg">⭐ المعدل: <span style="direction:ltr; display:inline-block">${avgText}</span></div>
+          </div>
+        </div>
+
+        <div class="leftRates">
+          <div class="row"><div class="emoji">🤝</div>${stars(c)}</div>
+          <div class="row"><div class="emoji">👩‍🎓</div>${stars(p)}</div>
+          <div class="row"><div class="emoji">👀</div>${stars(f)}</div>
+          <div class="row"><div class="emoji">🧠</div>${stars(b)}</div>
+          <div class="row"><div class="emoji">🎯</div>${stars(k)}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+(async function init(){
+  try{
+    debug.classList.remove("show");
+    count.textContent = "جاري التحميل…";
+
+    const res = await fetch(CSV_URL, { cache: "no-store" });
+    if(!res.ok) throw new Error("تعذر تحميل بيانات الشيت. تأكدي أنه منشور للويب.");
+
+    const text = await res.text();
+    const matrix = parseCSV(text);
+    const objs = toObjects(matrix);
+
+    rows = objs;
+    render();
+  }catch(err){
+    count.textContent = "لم يتم تحميل البيانات";
+    debug.textContent = "⚠️ " + err.message;
+    debug.classList.add("show");
+  }
+})();
+
+search.addEventListener("input", render);
+
+document.addEventListener("contextmenu", (e)=>{
+  if (e.target.tagName === "IMG" || e.target.closest(".avatarWrap")) e.preventDefault();
+});
+</script>
+</body>
+</html>
